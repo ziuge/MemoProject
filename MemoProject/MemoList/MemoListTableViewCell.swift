@@ -13,7 +13,7 @@ class MemoListTableViewCell: BaseTableViewCell {
         let view = UILabel()
         view.text = "hello"
         view.textColor = .white
-        view.font = .systemFont(ofSize: 16, weight: .heavy)
+        view.font = .systemFont(ofSize: 16, weight: .bold)
         return view
     }()
     
@@ -22,7 +22,7 @@ class MemoListTableViewCell: BaseTableViewCell {
         view.text = "220831   content"
         view.textAlignment = .left
         view.textColor = .white
-        view.font = .systemFont(ofSize: 13, weight: .light)
+        view.font = .systemFont(ofSize: 12, weight: .light)
         return view
     }()
     
@@ -34,6 +34,20 @@ class MemoListTableViewCell: BaseTableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    let formatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy. MM. dd. a hh:mm"
+        formatter.locale = Locale(identifier: "ko_KR")
+        return formatter
+    }()
+    
+    func setData(data: Memo) {
+        let date = formatter.string(from: data.date)
+        
+        titleLabel.text = data.title
+        contentLabel.text = "\(date)   \(data.content)"
+    }
+    
     override func configure() {
         backgroundColor = .darkGray
         [titleLabel, contentLabel].forEach {
@@ -42,15 +56,17 @@ class MemoListTableViewCell: BaseTableViewCell {
     }
     
     override func setConstraints() {
+        let spacing = 12
+        
         titleLabel.snp.makeConstraints { make in
-            make.leadingMargin.topMargin.equalTo(20)
-            make.trailingMargin.equalTo(-20)
+            make.leadingMargin.topMargin.equalTo(spacing)
+            make.trailingMargin.equalTo(-spacing)
         }
         
         contentLabel.snp.makeConstraints { make in
             make.leading.equalTo(titleLabel.snp.leading)
-            make.topMargin.equalTo(titleLabel.snp.bottom).offset(16)
-            make.trailingMargin.equalTo(-20)
+            make.topMargin.equalTo(titleLabel.snp.bottom).offset(spacing)
+            make.trailingMargin.equalTo(titleLabel.snp.trailing)
         }
     }
 }

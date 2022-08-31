@@ -10,50 +10,82 @@ import SnapKit
 
 class MemoListViewController: BaseViewController {
     
-    fileprivate var filtered = [String]()
+    fileprivate var filtered = [Memo]()
     fileprivate var filterring = false
     
-    var memoList: [String] = ["11", "22", "33"]
+    var memoList: [Memo] = [
+        Memo(title: "title", content: "content1", date: Date()),
+        Memo(title: "22", content: "content2", date: Date()),
+        Memo(title: "33", content: "content3", date: Date()),
+        Memo(title: "title", content: "content1", date: Date()),
+        Memo(title: "22", content: "content2", date: Date()),
+        Memo(title: "title", content: "content1", date: Date()),
+        Memo(title: "22", content: "content2", date: Date()),
+        Memo(title: "title", content: "content1", date: Date()),
+        Memo(title: "22", content: "content2", date: Date())
+    ]
     
     lazy var tableView: UITableView = {
-        let view = UITableView()
+        let view = UITableView(frame: .zero, style: .insetGrouped)
+        view.sectionFooterHeight = 0
+        view.sectionHeaderHeight = 50
         view.backgroundColor = .black
-        view.rowHeight = 100
+        view.rowHeight = 68
         view.delegate = self
         view.dataSource = self
         view.register(MemoListTableViewCell.self, forCellReuseIdentifier: MemoListTableViewCell.reuseIdentifier)
+        view.register(MemoListTableViewHeaderView.self, forHeaderFooterViewReuseIdentifier: MemoListTableViewHeaderView.reuseIdentifier)
         return view
+    }()
+    
+    let formatter: DateFormatter = {
+        let formatter = DateFormatter()
+        return formatter
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(#function, self)
-        view.backgroundColor = .systemGray
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
     
-    var total: Int = 0
+    
+    func decimalNum(num: Int) -> String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        let result = numberFormatter.string(for: num)!
+        return result
+    }
     
     override func configure() {
-        print(#function, self)
         view.addSubview(tableView)
         
-        title = "\(total)개의 메모"
-        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        self.navigationController?.navigationBar.barTintColor = .black
-        self.navigationController?.navigationBar.prefersLargeTitles = true
-        self.navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        let nav = navigationController!
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "star"), style: .plain, target: self, action: nil)
+        let total = decimalNum(num: self.memoList.count)
+        title = "\(total)개의 메모"
+        nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        nav.navigationBar.barTintColor = .black
+        nav.navigationBar.prefersLargeTitles = true
+        nav.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         
         let search = UISearchController(searchResultsController: nil)
         search.searchResultsUpdater = self
-        self.navigationItem.searchController = search
-        self.navigationController?.navigationBar.topItem?.searchController?.searchBar.placeholder = "검색"
         
+        self.navigationItem.searchController = search
+        nav.navigationBar.topItem?.searchController?.searchBar.placeholder = "검색"
+        
+        let write = UIBarButtonItem.init(image: UIImage(systemName: "square.and.pencil"), style: .plain, target: self, action: nil)
+        let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        
+        nav.isToolbarHidden = false
+        nav.toolbar.barTintColor = .black
+        nav.toolbar.tintColor = .systemOrange
+
+        toolbarItems = [space, write]
     }
     
     override func setConstraints() {
@@ -65,39 +97,76 @@ class MemoListViewController: BaseViewController {
     
 }
 
+// TableView
 extension MemoListViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "section"
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: MemoListTableViewHeaderView.reuseIdentifier) as? MemoListTableViewHeaderView else { return UIView() }
+        
+        let title = section == 0 ? "고정된 메모" : "메모"
+
+        header.headerLabel.text = title
+        
+        return header
     }
     
+//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        return section == 0 ? "고정된 메모" : "메모"
+//    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return section == 1 ? memoList.count : 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: MemoListTableViewCell.reuseIdentifier, for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: MemoListTableViewCell.reuseIdentifier, for: indexPath) as? MemoListTableViewCell else { return UITableViewCell() }
+        
+        cell.setData(data: memoList[indexPath.row])
+        
         return cell
     }
     
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        tableView.deselectRow(at: indexPath, animated: true)
-//    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let pin = UIContextualAction(style: .normal, title: nil) { action, view, completionHandler in
+            print("\(indexPath.row) pinned")
+        }
+        
+        let image = "pin.fill"
+        pin.image = UIImage(systemName: image)
+        pin.backgroundColor = .systemOrange
+        
+        return UISwipeActionsConfiguration(actions: [pin])
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let delete = UIContextualAction(style: .normal, title: nil) { action, view, completionHandler in
+            print("\(indexPath.row) delete")
+        }
+        
+        delete.image = UIImage(systemName: "trash.fill")
+        delete.backgroundColor = .systemRed
+        return UISwipeActionsConfiguration(actions: [delete])
+    }
 }
 
+// Search
 extension MemoListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         if let text = searchController.searchBar.text, !text.isEmpty {
             self.filtered = self.memoList.filter({ (memo) -> Bool in
-                return memo.lowercased().contains(text.lowercased())
+                return memo.title.lowercased().contains(text.lowercased())
             })
             self.filterring = true
         } else {
             self.filterring = false
-            self.filtered = [String]()
+            self.filtered = [Memo]()
         }
         self.tableView.reloadData()
     }
