@@ -63,27 +63,25 @@ class MemoListViewController: BaseViewController {
     override func configure() {
         view.addSubview(tableView)
         
-        let nav = navigationController!
-        
         let total = decimalNum(num: self.memoList.count)
         title = "\(total)개의 메모"
-        nav.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        nav.navigationBar.barTintColor = .black
-        nav.navigationBar.prefersLargeTitles = true
-        nav.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.barTintColor = .black
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         
         let search = UISearchController(searchResultsController: nil)
         search.searchResultsUpdater = self
         
         self.navigationItem.searchController = search
-        nav.navigationBar.topItem?.searchController?.searchBar.placeholder = "검색"
+        navigationController?.navigationBar.topItem?.searchController?.searchBar.placeholder = "검색"
         
-        let write = UIBarButtonItem.init(image: UIImage(systemName: "square.and.pencil"), style: .plain, target: self, action: nil)
+        let write = UIBarButtonItem.init(image: UIImage(systemName: "square.and.pencil"), style: .plain, target: self, action: #selector(writeButtonClicked))
         let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         
-        nav.isToolbarHidden = false
-        nav.toolbar.barTintColor = .black
-        nav.toolbar.tintColor = .systemOrange
+        navigationController?.isToolbarHidden = false
+        navigationController?.toolbar.barTintColor = .black
+        navigationController?.toolbar.tintColor = .systemOrange
 
         toolbarItems = [space, write]
     }
@@ -93,6 +91,12 @@ class MemoListViewController: BaseViewController {
             make.leading.bottom.trailing.equalTo(view.safeAreaLayoutGuide)
             make.topMargin.equalTo(view.safeAreaLayoutGuide)
         }
+    }
+    
+    @objc func writeButtonClicked() {
+        let vc = WriteViewController()
+        
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
 }
@@ -113,10 +117,6 @@ extension MemoListViewController: UITableViewDataSource, UITableViewDelegate {
         return header
     }
     
-//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        return section == 0 ? "고정된 메모" : "메모"
-//    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return section == 1 ? memoList.count : 1
     }
@@ -131,6 +131,10 @@ extension MemoListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let vc = WriteViewController()
+        vc.memo = memoList[indexPath.row]
+        vc.setData(data: vc.memo)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
