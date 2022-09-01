@@ -21,18 +21,6 @@ class MemoListViewController: BaseViewController {
         }
     }
     
-//    var memoList: [Memo] = [
-//        Memo(title: "title", content: "content1", date: Date()),
-//        Memo(title: "22", content: "content2", date: Date()),
-//        Memo(title: "33", content: "content3", date: Date()),
-//        Memo(title: "title", content: "content1", date: Date()),
-//        Memo(title: "22", content: "content2", date: Date()),
-//        Memo(title: "title", content: "content1", date: Date()),
-//        Memo(title: "22", content: "content2", date: Date()),
-//        Memo(title: "title", content: "content1", date: Date()),
-//        Memo(title: "22", content: "content2", date: Date())
-//    ]
-    
     lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .insetGrouped)
         view.sectionFooterHeight = 0
@@ -63,7 +51,7 @@ class MemoListViewController: BaseViewController {
     }
     
     func fetchRealm() {
-        memoList = localRealm.objects(UserMemo.self).sorted(byKeyPath: "date", ascending: true)
+        memoList = localRealm.objects(UserMemo.self).sorted(byKeyPath: "date", ascending: false)
     }
     
     
@@ -133,14 +121,20 @@ extension MemoListViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 1 ? memoList.count : 0
+//        return section == 1 ? memoList.count : 0
+        return section == 0 ? memoList.filter("pin == true").count : memoList.filter("pin == false").count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MemoListTableViewCell.reuseIdentifier, for: indexPath) as? MemoListTableViewCell else { return UITableViewCell() }
         
-        
         cell.setData(data: memoList[indexPath.row])
+
+        if indexPath.section == 0 {
+            cell.setData(data: memoList.filter("pin == true")[indexPath.row])
+        } else {
+            cell.setData(data: memoList.filter("pin == false")[indexPath.row])
+        }
         
         return cell
     }
@@ -154,10 +148,14 @@ extension MemoListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let pin = UIContextualAction(style: .normal, title: nil) { action, view, completionHandler in
-            print("\(indexPath.row) pinned")
+            try! self.localRealm.write({
+                self.memoList[indexPath.row].pin.toggle()
+            })
+            print(indexPath.row, self.memoList[indexPath.row].pin)
+            self.fetchRealm()
         }
         
-        let image = "pin.fill"
+        let image = memoList[indexPath.row].pin ? "pin.fill" : "pin.slash.fill"
         pin.image = UIImage(systemName: image)
         pin.backgroundColor = .systemOrange
         

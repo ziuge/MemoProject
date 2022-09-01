@@ -43,9 +43,9 @@ class MemoListTableViewCell: BaseTableViewCell {
     
     func setData(data: UserMemo) {
         let date = formatter.string(from: data.date)
-        
+        let content = data.content == nil ? "추가 텍스트 없음" : data.content
         titleLabel.text = data.title
-        contentLabel.text = "\(date)   \(data.content)"
+        contentLabel.text = "\(date)   \(content)"
     }
     
     override func configure() {
