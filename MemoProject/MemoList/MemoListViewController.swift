@@ -95,7 +95,7 @@ class MemoListViewController: BaseViewController {
     
     @objc func writeButtonClicked() {
         let vc = WriteViewController()
-        
+        vc.memo = Memo(title: "새로운 메모", content: "", date: Date())
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -133,7 +133,6 @@ extension MemoListViewController: UITableViewDataSource, UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         let vc = WriteViewController()
         vc.memo = memoList[indexPath.row]
-        vc.setData(data: vc.memo)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
