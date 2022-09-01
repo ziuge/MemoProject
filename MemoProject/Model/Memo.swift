@@ -8,6 +8,6 @@
 import Foundation
 
 struct Memo {
-    let title, content: String
-    let date: Date
+    var title, content: String
+    var date: Date
 }

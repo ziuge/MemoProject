@@ -7,10 +7,13 @@
 
 import Foundation
 import UIKit
+import RealmSwift
 
 class WriteViewController: BaseViewController {
     
-    var memo: Memo = Memo(title: "", content: "", date: Date())
+    let localRealm = try! Realm()
+    
+    var memo: UserMemo = UserMemo(title: "", content: "", date: Date(), pin: false)
     
     var titleTextView: UITextView = {
         let view = UITextView()
@@ -57,10 +60,18 @@ class WriteViewController: BaseViewController {
         setData(data: memo)
     }
     
-    func setData(data: Memo) {
+    func setData(data: UserMemo) {
         print(#function)
         titleTextView.text = data.title
         contentTextView.text = data.content
+    }
+    
+    func saveData(data: UserMemo) {
+        let memo = self.memo
+        
+        try! localRealm.write {
+            localRealm.add(memo)
+        }
     }
     
     override func configure() {
@@ -93,11 +104,24 @@ class WriteViewController: BaseViewController {
     }
     
     @objc func exportButtonClicked() {
-        showActivityViewController(shareTitle: self.memo.title, shareContent: self.memo.content)
+        showActivityViewController(shareTitle: self.memo.title, shareContent: self.memo.content!)
     }
     
     @objc func doneButtonClicked() {
+        saveMemo(memo: memo)
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    func saveMemo(memo: UserMemo) {
+        let memo = memo
+        do {
+            try localRealm.write({
+                localRealm.add(memo)
+                print("realm success")
+            })
+        } catch {
+            print(error)
+        }
     }
     
 }
@@ -119,6 +143,19 @@ extension WriteViewController: UITextViewDelegate {
                 }
             }
         }
+        
+        if textView == self.titleTextView {
+            try! localRealm.write({
+                memo.title = textView.text
+            })
+            print("memo", memo.title)
+        } else {
+            try! localRealm.write({
+                memo.content = textView.text
+            })
+            print("memo", memo.content!)
+        }
+        
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {

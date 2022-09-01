@@ -7,23 +7,31 @@
 
 import UIKit
 import SnapKit
+import RealmSwift
 
 class MemoListViewController: BaseViewController {
     
-    fileprivate var filtered = [Memo]()
+    fileprivate var filtered = [UserMemo]()
     fileprivate var filterring = false
     
-    var memoList: [Memo] = [
-        Memo(title: "title", content: "content1", date: Date()),
-        Memo(title: "22", content: "content2", date: Date()),
-        Memo(title: "33", content: "content3", date: Date()),
-        Memo(title: "title", content: "content1", date: Date()),
-        Memo(title: "22", content: "content2", date: Date()),
-        Memo(title: "title", content: "content1", date: Date()),
-        Memo(title: "22", content: "content2", date: Date()),
-        Memo(title: "title", content: "content1", date: Date()),
-        Memo(title: "22", content: "content2", date: Date())
-    ]
+    let localRealm = try! Realm()
+    var memoList: Results<UserMemo>! {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    
+//    var memoList: [Memo] = [
+//        Memo(title: "title", content: "content1", date: Date()),
+//        Memo(title: "22", content: "content2", date: Date()),
+//        Memo(title: "33", content: "content3", date: Date()),
+//        Memo(title: "title", content: "content1", date: Date()),
+//        Memo(title: "22", content: "content2", date: Date()),
+//        Memo(title: "title", content: "content1", date: Date()),
+//        Memo(title: "22", content: "content2", date: Date()),
+//        Memo(title: "title", content: "content1", date: Date()),
+//        Memo(title: "22", content: "content2", date: Date())
+//    ]
     
     lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .insetGrouped)
@@ -50,6 +58,12 @@ class MemoListViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        fetchRealm()
+    }
+    
+    func fetchRealm() {
+        memoList = localRealm.objects(UserMemo.self).sorted(byKeyPath: "date", ascending: true)
     }
     
     
@@ -62,6 +76,7 @@ class MemoListViewController: BaseViewController {
     
     override func configure() {
         view.addSubview(tableView)
+        fetchRealm()
         
         let total = decimalNum(num: self.memoList.count)
         title = "\(total)개의 메모"
@@ -95,7 +110,7 @@ class MemoListViewController: BaseViewController {
     
     @objc func writeButtonClicked() {
         let vc = WriteViewController()
-        vc.memo = Memo(title: "새로운 메모", content: "", date: Date())
+        vc.memo = UserMemo(title: "새로운 메모", content: "", date: Date(), pin: false)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -118,11 +133,12 @@ extension MemoListViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 1 ? memoList.count : 1
+        return section == 1 ? memoList.count : 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MemoListTableViewCell.reuseIdentifier, for: indexPath) as? MemoListTableViewCell else { return UITableViewCell() }
+        
         
         cell.setData(data: memoList[indexPath.row])
         
@@ -151,6 +167,11 @@ extension MemoListViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let delete = UIContextualAction(style: .normal, title: nil) { action, view, completionHandler in
             print("\(indexPath.row) delete")
+            try! self.localRealm.write {
+                self.localRealm.delete(self.memoList[indexPath.row])
+            }
+            self.fetchRealm()
+            tableView.reloadData()
         }
         
         delete.image = UIImage(systemName: "trash.fill")
@@ -169,7 +190,7 @@ extension MemoListViewController: UISearchResultsUpdating {
             self.filterring = true
         } else {
             self.filterring = false
-            self.filtered = [Memo]()
+            self.filtered = [UserMemo]()
         }
         self.tableView.reloadData()
     }

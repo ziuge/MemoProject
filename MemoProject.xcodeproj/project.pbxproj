@@ -26,6 +26,9 @@
 		DEC8784E28BF330700CCB5BD /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = DEC8784D28BF330700CCB5BD /* SnapKit */; };
 		DEC8785028BF38C400CCB5BD /* MemoListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC8784F28BF38C400CCB5BD /* MemoListTableViewCell.swift */; };
 		DEC8785328BF3AD900CCB5BD /* ReusableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC8785228BF3AD900CCB5BD /* ReusableProtocol.swift */; };
+		DEFFD08B28C090460067B9CC /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = DEFFD08A28C090460067B9CC /* Realm */; };
+		DEFFD08D28C090460067B9CC /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DEFFD08C28C090460067B9CC /* RealmSwift */; };
+		DEFFD08F28C090B10067B9CC /* RealmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFFD08E28C090B10067B9CC /* RealmModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +52,7 @@
 		DEC8784828BF290F00CCB5BD /* MemoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoListViewController.swift; sourceTree = "<group>"; };
 		DEC8784F28BF38C400CCB5BD /* MemoListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoListTableViewCell.swift; sourceTree = "<group>"; };
 		DEC8785228BF3AD900CCB5BD /* ReusableProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableProtocol.swift; sourceTree = "<group>"; };
+		DEFFD08E28C090B10067B9CC /* RealmModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +60,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DEFFD08D28C090460067B9CC /* RealmSwift in Frameworks */,
+				DEFFD08B28C090460067B9CC /* Realm in Frameworks */,
 				DEC8784E28BF330700CCB5BD /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -67,6 +73,7 @@
 			isa = PBXGroup;
 			children = (
 				DE5DDCD428BF504B00F1DC87 /* Memo.swift */,
+				DEFFD08E28C090B10067B9CC /* RealmModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -171,6 +178,8 @@
 			name = MemoProject;
 			packageProductDependencies = (
 				DEC8784D28BF330700CCB5BD /* SnapKit */,
+				DEFFD08A28C090460067B9CC /* Realm */,
+				DEFFD08C28C090460067B9CC /* RealmSwift */,
 			);
 			productName = MemoProject;
 			productReference = DEC8782528BF25EB00CCB5BD /* MemoProject.app */;
@@ -202,6 +211,7 @@
 			mainGroup = DEC8781C28BF25EB00CCB5BD;
 			packageReferences = (
 				DEC8784C28BF330700CCB5BD /* XCRemoteSwiftPackageReference "SnapKit" */,
+				DEFFD08928C090460067B9CC /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			productRefGroup = DEC8782628BF25EB00CCB5BD /* Products */;
 			projectDirPath = "";
@@ -243,6 +253,7 @@
 				DEC8783F28BF270F00CCB5BD /* BaseView.swift in Sources */,
 				DE5DDCD728BF57A600F1DC87 /* BaseTableViewHeaderView.swift in Sources */,
 				DE5DDCD928BF588800F1DC87 /* MemoListTableViewHeaderView.swift in Sources */,
+				DEFFD08F28C090B10067B9CC /* RealmModel.swift in Sources */,
 				DE5DDCDE28BF78FC00F1DC87 /* ActivityViewController.swift in Sources */,
 				DEC8784428BF278600CCB5BD /* Color.swift in Sources */,
 			);
@@ -476,6 +487,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		DEFFD08928C090460067B9CC /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -483,6 +502,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DEC8784C28BF330700CCB5BD /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		DEFFD08A28C090460067B9CC /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DEFFD08928C090460067B9CC /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
+		};
+		DEFFD08C28C090460067B9CC /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DEFFD08928C090460067B9CC /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

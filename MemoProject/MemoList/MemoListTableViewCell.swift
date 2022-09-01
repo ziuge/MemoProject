@@ -41,7 +41,7 @@ class MemoListTableViewCell: BaseTableViewCell {
         return formatter
     }()
     
-    func setData(data: Memo) {
+    func setData(data: UserMemo) {
         let date = formatter.string(from: data.date)
         
         titleLabel.text = data.title
