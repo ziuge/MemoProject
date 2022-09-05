@@ -16,9 +16,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
         
-        let viewController = MemoListViewController()
-        let navigationController = UINavigationController(rootViewController: viewController)
-        window?.rootViewController = navigationController
+        if UserDefaults.standard.bool(forKey: "first") {
+            
+            let viewController = MemoListViewController()
+            let navigationController = UINavigationController(rootViewController: viewController)
+            window?.rootViewController = navigationController
+        } else {
+            let popvc = FirstViewController()
+            popvc.modalPresentationStyle = .popover
+            
+            let viewController = MemoListViewController()
+            let navigationController = UINavigationController(rootViewController: viewController)
+            
+            window?.rootViewController = navigationController
+            
+            navigationController.pushViewController(popvc, animated: true)
+        }
         window?.makeKeyAndVisible()
     }
 

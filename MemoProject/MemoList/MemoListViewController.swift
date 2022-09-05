@@ -56,6 +56,7 @@ class MemoListViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        UserDefaults.standard.set(false, forKey: "first")
     }
     
     override func viewWillAppear(_ animated: Bool) {
