@@ -196,9 +196,6 @@ extension MemoListViewController: UITableViewDataSource, UITableViewDelegate {
             }
         }
         
-        
-        
-        
         return cell
     }
     
@@ -244,16 +241,26 @@ extension MemoListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let delete = UIContextualAction(style: .normal, title: nil) { action, view, completionHandler in
-            print("\(indexPath.row) delete")
-            try! self.localRealm.write {
-                if indexPath.section == 0 {
-                    self.localRealm.delete(self.pinned[indexPath.row])
-                } else {
-                    self.localRealm.delete(self.unpinned[indexPath.row])
+            
+            let alert = UIAlertController(title: "정말로 삭제하시겠습니까?", message: "", preferredStyle: .alert)
+            let ok = UIAlertAction(title: "OK", style: .default) { action in
+                try! self.localRealm.write {
+                    if indexPath.section == 0 {
+                        self.localRealm.delete(self.pinned[indexPath.row])
+                    } else {
+                        self.localRealm.delete(self.unpinned[indexPath.row])
+                    }
                 }
+                self.fetchRealm()
+                tableView.reloadData()
             }
-            self.fetchRealm()
-            tableView.reloadData()
+            let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+
+            alert.addAction(ok)
+            alert.addAction(cancel)
+
+            self.present(alert, animated: true)
+            
         }
         
         delete.image = UIImage(systemName: "trash.fill")
