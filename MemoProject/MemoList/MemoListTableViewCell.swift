@@ -41,11 +41,33 @@ class MemoListTableViewCell: BaseTableViewCell {
         return formatter
     }()
     
+    let formatterToday: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "a hh:mm"
+        formatter.locale = Locale(identifier: "ko_KR")
+        return formatter
+    }()
+    
+    let formatterWeek: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "E요일"
+        formatter.locale = Locale(identifier: "ko_KR")
+        return formatter
+    }()
+    
     func setData(data: UserMemo) {
-        let date = formatter.string(from: data.date)
-        let content = data.content == nil ? "추가 텍스트 없음" : data.content
+        var date = formatter.string(from: data.date)
+        let timeInterval = Int(Date().timeIntervalSince(data.date))
+        if timeInterval < 86400 {
+            date = formatterToday.string(from: data.date)
+        } else if timeInterval < 604800 {
+            date = formatterWeek.string(from: data.date)
+        } else {
+            date = formatter.string(from: data.date)
+        }
+        let content = data.content == "" ? "추가 텍스트 없음" : data.content
         titleLabel.text = data.title
-        contentLabel.text = "\(date)   \(content)"
+        contentLabel.text = "\(date)   \(content!)"
     }
     
     override func configure() {

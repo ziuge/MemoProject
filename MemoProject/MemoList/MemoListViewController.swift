@@ -98,7 +98,6 @@ class MemoListViewController: BaseViewController {
         search.searchBar.tintColor = .white
         
         self.navigationItem.searchController = search
-//        navigationController?.navigationBar.topItem?.searchController?.searchBar.placeholder = "검색"
         
         let write = UIBarButtonItem.init(image: UIImage(systemName: "square.and.pencil"), style: .plain, target: self, action: #selector(writeButtonClicked))
         let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
@@ -121,6 +120,14 @@ class MemoListViewController: BaseViewController {
         let vc = WriteViewController()
         vc.memo = UserMemo(title: "", content: "", date: Date(), pin: false)
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    var searchText = ""
+    
+    func changeFindColor(text: String) -> NSMutableAttributedString {
+        let attributeString = NSMutableAttributedString(string: text)
+        attributeString.addAttribute(.foregroundColor, value: UIColor.orange, range: (text as NSString).range(of: "\(text)"))
+        return attributeString
     }
     
 }
@@ -161,6 +168,13 @@ extension MemoListViewController: UITableViewDataSource, UITableViewDelegate {
         
         if self.filterring {
             cell.setData(data: self.filtered[indexPath.row])
+            
+            let text = cell.titleLabel.text
+            let attributeString = NSMutableAttributedString(string: text!)
+            attributeString.addAttribute(.foregroundColor, value: UIColor.orange, range: (text! as NSString).range(of: "\(searchText)"))
+            
+            cell.titleLabel.attributedText = attributeString
+            
         } else {
             if indexPath.section == 0 {
                 cell.setData(data: pinned[indexPath.row])
@@ -181,6 +195,8 @@ extension MemoListViewController: UITableViewDataSource, UITableViewDelegate {
                 }
             }
         }
+        
+        
         
         
         return cell
@@ -254,7 +270,7 @@ extension MemoListViewController: UISearchResultsUpdating {
                 return memo.title.lowercased().contains(text)
             })
             self.filterring = true
-            print(text, filtered)
+            self.searchText = text
         } else {
             self.filterring = false
             self.filtered = [UserMemo]()
