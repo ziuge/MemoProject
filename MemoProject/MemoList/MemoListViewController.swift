@@ -21,6 +21,20 @@ class MemoListViewController: BaseViewController {
         }
     }
     
+    var pinned = try! Realm().objects(UserMemo.self).filter("pin == true") {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    var unpinned = try! Realm().objects(UserMemo.self).filter("pin == false") {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    
+    let items = try! Realm().objects(UserMemo.self).sorted(by: ["pin", "date"])
+    var sectionNames: [String] = ["고정된 메모", "메모"]
+    
     lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .insetGrouped)
         view.sectionFooterHeight = 0
@@ -52,8 +66,9 @@ class MemoListViewController: BaseViewController {
     
     func fetchRealm() {
         memoList = localRealm.objects(UserMemo.self).sorted(byKeyPath: "date", ascending: false)
+        pinned = localRealm.objects(UserMemo.self).filter("pin == true")
+        unpinned = localRealm.objects(UserMemo.self).filter("pin == false")
     }
-    
     
     func decimalNum(num: Int) -> String {
         let numberFormatter = NumberFormatter()
@@ -106,6 +121,7 @@ class MemoListViewController: BaseViewController {
 
 // TableView
 extension MemoListViewController: UITableViewDataSource, UITableViewDelegate {
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
@@ -113,27 +129,29 @@ extension MemoListViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: MemoListTableViewHeaderView.reuseIdentifier) as? MemoListTableViewHeaderView else { return UIView() }
         
-        let title = section == 0 ? "고정된 메모" : "메모"
-
-        header.headerLabel.text = title
+        header.headerLabel.text = sectionNames[section]
         
         return header
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 //        return section == 1 ? memoList.count : 0
-        return section == 0 ? memoList.filter("pin == true").count : memoList.filter("pin == false").count
+//        return section == 0 ? memoList.filter("pin == true").count : memoList.filter("pin == false").count
+
+        return section == 0 ? pinned.count : unpinned.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MemoListTableViewCell.reuseIdentifier, for: indexPath) as? MemoListTableViewCell else { return UITableViewCell() }
         
-        cell.setData(data: memoList[indexPath.row])
-
+//        cell.setData(data: items.filter("pin == true", sectionNames[indexPath.section])[indexPath.row])
+//        cell.textLabel?.text = items.filter("race == %@", sectionNames[indexPath.section])[indexPath.row].name
         if indexPath.section == 0 {
-            cell.setData(data: memoList.filter("pin == true")[indexPath.row])
+//            cell.setData(data: memoList.filter("pin == true")[indexPath.row])
+            cell.setData(data: pinned[indexPath.row])
         } else {
-            cell.setData(data: memoList.filter("pin == false")[indexPath.row])
+//            cell.setData(data: memoList.filter("pin == false")[indexPath.row])
+            cell.setData(data: unpinned[indexPath.row])
         }
         
         return cell
@@ -148,14 +166,26 @@ extension MemoListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let pin = UIContextualAction(style: .normal, title: nil) { action, view, completionHandler in
+            
+            if self.pinned.count >= 5 && indexPath.section == 1 {
+                self.showAlert(title: "메모는 5개까지 고정할 수 있습니다.")
+                return
+            }
+            
             try! self.localRealm.write({
-                self.memoList[indexPath.row].pin.toggle()
+                if indexPath.section == 0 {
+                    self.pinned[indexPath.row].pin.toggle()
+                } else {
+                    self.unpinned[indexPath.row].pin.toggle()
+                }
+//                self.items[indexPath.row].pin.toggle()
             })
-            print(indexPath.row, self.memoList[indexPath.row].pin)
             self.fetchRealm()
         }
         
-        let image = memoList[indexPath.row].pin ? "pin.fill" : "pin.slash.fill"
+        let items = indexPath.section == 0 ? self.pinned : self.unpinned
+        let image = items[indexPath.row].pin == false ? "pin.fill" : "pin.slash.fill"
+        
         pin.image = UIImage(systemName: image)
         pin.backgroundColor = .systemOrange
         
@@ -166,7 +196,11 @@ extension MemoListViewController: UITableViewDataSource, UITableViewDelegate {
         let delete = UIContextualAction(style: .normal, title: nil) { action, view, completionHandler in
             print("\(indexPath.row) delete")
             try! self.localRealm.write {
-                self.localRealm.delete(self.memoList[indexPath.row])
+                if indexPath.section == 0 {
+                    self.localRealm.delete(self.pinned[indexPath.row])
+                } else {
+                    self.localRealm.delete(self.unpinned[indexPath.row])
+                }
             }
             self.fetchRealm()
             tableView.reloadData()

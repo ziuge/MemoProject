@@ -109,6 +109,9 @@ class WriteViewController: BaseViewController {
     
     @objc func doneButtonClicked() {
         saveMemo(memo: memo)
+        let vc = MemoListViewController()
+        vc.fetchRealm()
+        vc.tableView.reloadData()
         self.navigationController?.popViewController(animated: true)
     }
     

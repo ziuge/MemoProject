@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DE024EB728C5B29D00FE2F2A /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE024EB628C5B29D00FE2F2A /* Alert.swift */; };
 		DE5DDCD528BF504B00F1DC87 /* Memo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5DDCD428BF504B00F1DC87 /* Memo.swift */; };
 		DE5DDCD728BF57A600F1DC87 /* BaseTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5DDCD628BF57A600F1DC87 /* BaseTableViewHeaderView.swift */; };
 		DE5DDCD928BF588800F1DC87 /* MemoListTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5DDCD828BF588800F1DC87 /* MemoListTableViewHeaderView.swift */; };
@@ -32,6 +33,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DE024EB628C5B29D00FE2F2A /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		DE5DDCD428BF504B00F1DC87 /* Memo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memo.swift; sourceTree = "<group>"; };
 		DE5DDCD628BF57A600F1DC87 /* BaseTableViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewHeaderView.swift; sourceTree = "<group>"; };
 		DE5DDCD828BF588800F1DC87 /* MemoListTableViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoListTableViewHeaderView.swift; sourceTree = "<group>"; };
@@ -106,7 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				DE5DDCD328BF502A00F1DC87 /* Model */,
-				DEC8785128BF3AC900CCB5BD /* Protocol */,
+				DEC8785128BF3AC900CCB5BD /* Framework */,
 				DE5DDCDA28BF724E00F1DC87 /* Write */,
 				DEC8784728BF28FC00CCB5BD /* MemoList */,
 				DEC8784228BF277D00CCB5BD /* Constants */,
@@ -151,13 +153,14 @@
 			path = MemoList;
 			sourceTree = "<group>";
 		};
-		DEC8785128BF3AC900CCB5BD /* Protocol */ = {
+		DEC8785128BF3AC900CCB5BD /* Framework */ = {
 			isa = PBXGroup;
 			children = (
 				DEC8785228BF3AD900CCB5BD /* ReusableProtocol.swift */,
 				DE5DDCDD28BF78FC00F1DC87 /* ActivityViewController.swift */,
+				DE024EB628C5B29D00FE2F2A /* Alert.swift */,
 			);
-			path = Protocol;
+			path = Framework;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -243,6 +246,7 @@
 				DEC8784928BF290F00CCB5BD /* MemoListViewController.swift in Sources */,
 				DEC8784128BF271700CCB5BD /* BaseViewController.swift in Sources */,
 				DEC8782D28BF25EB00CCB5BD /* ViewController.swift in Sources */,
+				DE024EB728C5B29D00FE2F2A /* Alert.swift in Sources */,
 				DEC8782928BF25EB00CCB5BD /* AppDelegate.swift in Sources */,
 				DEC8785028BF38C400CCB5BD /* MemoListTableViewCell.swift in Sources */,
 				DEC8785328BF3AD900CCB5BD /* ReusableProtocol.swift in Sources */,
