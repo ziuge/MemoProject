@@ -36,18 +36,14 @@ class WriteViewController: BaseViewController {
         view.isEditable = true
         view.textColor = .white
         view.font = .systemFont(ofSize: 14, weight: .medium)
-//        view.isScrollEnabled = false
-//        view.translatesAutoresizingMaskIntoConstraints = true
-//        view.sizeToFit()
         return view
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(#function)
+//        print(#function)
         view.backgroundColor = .black
         titleTextView.becomeFirstResponder()
-        
         
         titleTextView.delegate = self
         contentTextView.delegate = self
@@ -56,22 +52,17 @@ class WriteViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print(#function)
         setData(data: memo)
     }
     
-    func setData(data: UserMemo) {
-        print(#function)
-        titleTextView.text = data.title
-        contentTextView.text = data.content
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        saveMemo(memo: memo)
     }
     
-    func saveData(data: UserMemo) {
-        let memo = self.memo
-        
-        try! localRealm.write {
-            localRealm.add(memo)
-        }
+    func setData(data: UserMemo) {
+        titleTextView.text = data.title
+        contentTextView.text = data.content
     }
     
     override func configure() {
@@ -109,14 +100,11 @@ class WriteViewController: BaseViewController {
     
     @objc func doneButtonClicked() {
         saveMemo(memo: memo)
-        let vc = MemoListViewController()
-        vc.fetchRealm()
-        vc.tableView.reloadData()
-        self.navigationController?.popViewController(animated: true)
     }
     
     func saveMemo(memo: UserMemo) {
         let memo = memo
+        
         do {
             try localRealm.write({
                 localRealm.add(memo)
@@ -125,6 +113,11 @@ class WriteViewController: BaseViewController {
         } catch {
             print(error)
         }
+        
+        let vc = MemoListViewController()
+        vc.fetchRealm()
+        vc.tableView.reloadData()
+        self.navigationController?.popViewController(animated: true)
     }
     
 }

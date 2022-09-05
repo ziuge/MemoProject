@@ -21,12 +21,12 @@ class MemoListViewController: BaseViewController {
         }
     }
     
-    var pinned = try! Realm().objects(UserMemo.self).filter("pin == true") {
+    var pinned = try! Realm().objects(UserMemo.self).filter("pin == true").sorted(byKeyPath: "date") {
         didSet {
             tableView.reloadData()
         }
     }
-    var unpinned = try! Realm().objects(UserMemo.self).filter("pin == false") {
+    var unpinned = try! Realm().objects(UserMemo.self).filter("pin == false").sorted(byKeyPath: "date") {
         didSet {
             tableView.reloadData()
         }
@@ -68,6 +68,8 @@ class MemoListViewController: BaseViewController {
         memoList = localRealm.objects(UserMemo.self).sorted(byKeyPath: "date", ascending: false)
         pinned = localRealm.objects(UserMemo.self).filter("pin == true")
         unpinned = localRealm.objects(UserMemo.self).filter("pin == false")
+        let total = decimalNum(num: self.memoList.count)
+        self.title = "\(total)개의 메모"
     }
     
     func decimalNum(num: Int) -> String {
@@ -113,7 +115,7 @@ class MemoListViewController: BaseViewController {
     
     @objc func writeButtonClicked() {
         let vc = WriteViewController()
-        vc.memo = UserMemo(title: "새로운 메모", content: "", date: Date(), pin: false)
+        vc.memo = UserMemo(title: "", content: "", date: Date(), pin: false)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -135,24 +137,31 @@ extension MemoListViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return section == 1 ? memoList.count : 0
-//        return section == 0 ? memoList.filter("pin == true").count : memoList.filter("pin == false").count
-
         return section == 0 ? pinned.count : unpinned.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MemoListTableViewCell.reuseIdentifier, for: indexPath) as? MemoListTableViewCell else { return UITableViewCell() }
         
-//        cell.setData(data: items.filter("pin == true", sectionNames[indexPath.section])[indexPath.row])
-//        cell.textLabel?.text = items.filter("race == %@", sectionNames[indexPath.section])[indexPath.row].name
         if indexPath.section == 0 {
-//            cell.setData(data: memoList.filter("pin == true")[indexPath.row])
             cell.setData(data: pinned[indexPath.row])
+            if pinned[indexPath.row].title == "" && pinned[indexPath.row].content == "" {
+                try! localRealm.write({
+                    localRealm.delete(pinned[indexPath.row])
+                })
+                
+                fetchRealm()
+            }
         } else {
-//            cell.setData(data: memoList.filter("pin == false")[indexPath.row])
             cell.setData(data: unpinned[indexPath.row])
+            if unpinned[indexPath.row].title == "" && unpinned[indexPath.row].content == "" {
+                try! localRealm.write({
+                    localRealm.delete(unpinned[indexPath.row])
+                })
+                fetchRealm()
+            }
         }
+        
         
         return cell
     }
@@ -160,7 +169,12 @@ extension MemoListViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let vc = WriteViewController()
-        vc.memo = memoList[indexPath.row]
+        
+        if indexPath.section == 0{
+            vc.memo = pinned[indexPath.row]
+        } else {
+            vc.memo = unpinned[indexPath.row]
+        }
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -178,7 +192,7 @@ extension MemoListViewController: UITableViewDataSource, UITableViewDelegate {
                 } else {
                     self.unpinned[indexPath.row].pin.toggle()
                 }
-//                self.items[indexPath.row].pin.toggle()
+
             })
             self.fetchRealm()
         }
