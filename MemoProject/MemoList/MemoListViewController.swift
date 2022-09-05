@@ -92,9 +92,13 @@ class MemoListViewController: BaseViewController {
         
         let search = UISearchController(searchResultsController: nil)
         search.searchResultsUpdater = self
+        search.hidesNavigationBarDuringPresentation = false
+        search.searchResultsUpdater = self
+        search.searchBar.placeholder = "검색"
+        search.searchBar.tintColor = .white
         
         self.navigationItem.searchController = search
-        navigationController?.navigationBar.topItem?.searchController?.searchBar.placeholder = "검색"
+//        navigationController?.navigationBar.topItem?.searchController?.searchBar.placeholder = "검색"
         
         let write = UIBarButtonItem.init(image: UIImage(systemName: "square.and.pencil"), style: .plain, target: self, action: #selector(writeButtonClicked))
         let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
@@ -125,40 +129,56 @@ class MemoListViewController: BaseViewController {
 extension MemoListViewController: UITableViewDataSource, UITableViewDelegate {
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return filterring ? 1 : 2
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: MemoListTableViewHeaderView.reuseIdentifier) as? MemoListTableViewHeaderView else { return UIView() }
         
         header.headerLabel.text = sectionNames[section]
+        if filterring {
+            header.headerLabel.text = "\(self.filtered.count)개 찾음"
+        }
         
         return header
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? pinned.count : unpinned.count
+        var nums = 0
+        
+        if filterring {
+            nums = self.filtered.count
+        } else {
+            nums = section == 0 ? pinned.count : unpinned.count
+        }
+        
+        return nums
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MemoListTableViewCell.reuseIdentifier, for: indexPath) as? MemoListTableViewCell else { return UITableViewCell() }
         
-        if indexPath.section == 0 {
-            cell.setData(data: pinned[indexPath.row])
-            if pinned[indexPath.row].title == "" && pinned[indexPath.row].content == "" {
-                try! localRealm.write({
-                    localRealm.delete(pinned[indexPath.row])
-                })
-                
-                fetchRealm()
-            }
+        
+        if self.filterring {
+            cell.setData(data: self.filtered[indexPath.row])
         } else {
-            cell.setData(data: unpinned[indexPath.row])
-            if unpinned[indexPath.row].title == "" && unpinned[indexPath.row].content == "" {
-                try! localRealm.write({
-                    localRealm.delete(unpinned[indexPath.row])
-                })
-                fetchRealm()
+            if indexPath.section == 0 {
+                cell.setData(data: pinned[indexPath.row])
+                if pinned[indexPath.row].title == "" && pinned[indexPath.row].content == "" {
+                    try! localRealm.write({
+                        localRealm.delete(pinned[indexPath.row])
+                    })
+                    
+                    fetchRealm()
+                }
+            } else {
+                cell.setData(data: unpinned[indexPath.row])
+                if unpinned[indexPath.row].title == "" && unpinned[indexPath.row].content == "" {
+                    try! localRealm.write({
+                        localRealm.delete(unpinned[indexPath.row])
+                    })
+                    fetchRealm()
+                }
             }
         }
         
@@ -229,11 +249,12 @@ extension MemoListViewController: UITableViewDataSource, UITableViewDelegate {
 // Search
 extension MemoListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        if let text = searchController.searchBar.text, !text.isEmpty {
+        if let text = searchController.searchBar.text?.lowercased(), !text.isEmpty {
             self.filtered = self.memoList.filter({ (memo) -> Bool in
-                return memo.title.lowercased().contains(text.lowercased())
+                return memo.title.lowercased().contains(text)
             })
             self.filterring = true
+            print(text, filtered)
         } else {
             self.filterring = false
             self.filtered = [UserMemo]()
