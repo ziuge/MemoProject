@@ -44,17 +44,16 @@ class FirstViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
-        
-        UserDefaults.standard.set(true, forKey: "first")
-        
+        UserDefaults.standard.set(true, forKey: "tuto")
     }
-
     
     override func configure() {
         
         [blackView, label, button].forEach {
             view.addSubview($0)
         }
+        
+        button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
         
     }
     
@@ -82,7 +81,9 @@ class FirstViewController: BaseViewController {
         }
     }
     
-    
+    @objc func buttonAction() {
+        self.dismiss(animated: true)
+    }
     
     
 }

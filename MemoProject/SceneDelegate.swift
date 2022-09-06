@@ -16,22 +16,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
         
-        if UserDefaults.standard.bool(forKey: "first") {
-            
-            let viewController = MemoListViewController()
-            let navigationController = UINavigationController(rootViewController: viewController)
-            window?.rootViewController = navigationController
-        } else {
-            let popvc = FirstViewController()
-            popvc.modalPresentationStyle = .popover
-            
-            let viewController = MemoListViewController()
-            let navigationController = UINavigationController(rootViewController: viewController)
-            
-            window?.rootViewController = navigationController
-            
-            navigationController.pushViewController(popvc, animated: true)
-        }
+//        if UserDefaults.standard.bool(forKey: "first") {
+//            
+//            let viewController = MemoListViewController()
+//            let navigationController = UINavigationController(rootViewController: viewController)
+//            window?.rootViewController = navigationController
+//        } else {
+//            let popvc = FirstViewController()
+//            popvc.modalPresentationStyle = .popover
+//            
+//            let viewController = MemoListViewController()
+//            let navigationController = UINavigationController(rootViewController: viewController)
+//            
+//            window?.rootViewController = navigationController
+//            
+//            navigationController.present(popvc, animated: true)
+////            navigationController.pushViewController(popvc, animated: true)
+//        }
+        let viewController = MemoListViewController()
+        let navigationController = UINavigationController(rootViewController: viewController)
+        window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
 

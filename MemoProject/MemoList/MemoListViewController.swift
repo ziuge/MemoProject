@@ -56,13 +56,21 @@ class MemoListViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        UserDefaults.standard.set(false, forKey: "first")
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         fetchRealm()
+        
+        if UserDefaults.standard.bool(forKey: "tuto") == false {
+            let vc = FirstViewController()
+            vc.modalPresentationStyle = .popover
+            self.present(vc, animated: false)
+        } else {
+            print("not first")
+        }
     }
     
     func fetchRealm() {
