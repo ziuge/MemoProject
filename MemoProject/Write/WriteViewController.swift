@@ -12,6 +12,7 @@ import RealmSwift
 class WriteViewController: BaseViewController {
     
     let localRealm = try! Realm()
+    let repository = MemoRepository()
     
     var memo: UserMemo = UserMemo(title: "", content: "", date: Date(), pin: false)
     
@@ -57,7 +58,7 @@ class WriteViewController: BaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        saveMemo(memo: memo)
+        repository.saveMemo(memo: memo)
     }
     
     func setData(data: UserMemo) {
@@ -99,26 +100,30 @@ class WriteViewController: BaseViewController {
     }
     
     @objc func doneButtonClicked() {
-        saveMemo(memo: memo)
-    }
-    
-    func saveMemo(memo: UserMemo) {
-        let memo = memo
-        
-        do {
-            try localRealm.write({
-                localRealm.add(memo)
-                print("realm success")
-            })
-        } catch {
-            print(error)
-        }
-        
+        repository.saveMemo(memo: memo)
         let vc = MemoListViewController()
         vc.fetchRealm()
         vc.tableView.reloadData()
         self.navigationController?.popViewController(animated: true)
     }
+    
+//    func saveMemo(memo: UserMemo) {
+//        let memo = memo
+//
+//        do {
+//            try localRealm.write({
+//                localRealm.add(memo)
+//                print("realm success")
+//            })
+//        } catch {
+//            print(error)
+//        }
+//
+//        let vc = MemoListViewController()
+//        vc.fetchRealm()
+//        vc.tableView.reloadData()
+//        self.navigationController?.popViewController(animated: true)
+//    }
     
 }
 

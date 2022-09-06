@@ -16,7 +16,7 @@ class MemoListViewController: BaseViewController {
     
     let localRealm = try! Realm()
     var memoList: Results<UserMemo>! {
-        didSet {
+        didSet { // repository에서 didSet 적용?? 
             tableView.reloadData()
         }
     }
@@ -55,7 +55,6 @@ class MemoListViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
     }
     
