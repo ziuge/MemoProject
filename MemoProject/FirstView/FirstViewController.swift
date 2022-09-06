@@ -12,7 +12,7 @@ class FirstViewController: BaseViewController {
     
     var blackView: UIView = {
         let view = UIView()
-        view.backgroundColor = .black
+        view.backgroundColor = Constants.BaseColor.background
         view.layer.cornerRadius = 20
         return view
     }()
@@ -26,7 +26,7 @@ class FirstViewController: BaseViewController {
         당신만의 메모를 작성하고
         관리해보세요!
         """
-        view.textColor = .white
+        view.textColor = Constants.BaseColor.text
         view.font = .systemFont(ofSize: 18, weight: .bold)
         view.numberOfLines = 0
         return view
@@ -36,7 +36,7 @@ class FirstViewController: BaseViewController {
         let view = UIButton()
         view.setTitle("확인", for: .normal)
 //        view.addAction(, for: .touchUpInside)
-        view.backgroundColor = .systemOrange
+        view.backgroundColor = Constants.BaseColor.point
         view.layer.cornerRadius = 10
         return view
     }()

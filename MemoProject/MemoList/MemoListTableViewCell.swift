@@ -12,7 +12,7 @@ class MemoListTableViewCell: BaseTableViewCell {
     let titleLabel: UILabel = {
         let view = UILabel()
         view.text = "hello"
-        view.textColor = .white
+        view.textColor = Constants.BaseColor.text
         view.font = .systemFont(ofSize: 16, weight: .bold)
         return view
     }()
@@ -21,7 +21,7 @@ class MemoListTableViewCell: BaseTableViewCell {
         let view = UILabel()
         view.text = "220831   content"
         view.textAlignment = .left
-        view.textColor = .white
+        view.textColor = Constants.BaseColor.text
         view.font = .systemFont(ofSize: 12, weight: .light)
         return view
     }()

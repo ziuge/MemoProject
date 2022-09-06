@@ -10,7 +10,7 @@ import UIKit
 class MemoListTableViewHeaderView: BaseTableViewHeaderView {
     var headerLabel: UILabel = {
         let view = UILabel()
-        view.textColor = .white
+        view.textColor = Constants.BaseColor.text
         view.font = .systemFont(ofSize: 18, weight: .black)
         return view
     }()

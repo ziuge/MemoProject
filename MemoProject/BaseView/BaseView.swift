@@ -19,7 +19,7 @@ class BaseView: UIView {
     }
     
     func configureUI() {
-        self.backgroundColor = .black
+        self.backgroundColor = Constants.BaseColor.background
     }
     
     func setConstraints() { }

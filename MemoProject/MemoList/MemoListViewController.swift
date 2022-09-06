@@ -39,7 +39,7 @@ class MemoListViewController: BaseViewController {
         let view = UITableView(frame: .zero, style: .insetGrouped)
         view.sectionFooterHeight = 0
         view.sectionHeaderHeight = 50
-        view.backgroundColor = .black
+        view.backgroundColor = Constants.BaseColor.background
         view.rowHeight = 68
         view.delegate = self
         view.dataSource = self
@@ -86,17 +86,17 @@ class MemoListViewController: BaseViewController {
         
         let total = decimalNum(num: self.memoList.count)
         title = "\(total)개의 메모"
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationController?.navigationBar.barTintColor = .black
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: Constants.BaseColor.text]
+        navigationController?.navigationBar.barTintColor = Constants.BaseColor.background
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: Constants.BaseColor.text]
         
         let search = UISearchController(searchResultsController: nil)
         search.searchResultsUpdater = self
         search.hidesNavigationBarDuringPresentation = false
         search.searchResultsUpdater = self
         search.searchBar.placeholder = "검색"
-        search.searchBar.tintColor = .white
+        search.searchBar.tintColor = Constants.BaseColor.text
         
         self.navigationItem.searchController = search
         
@@ -104,8 +104,8 @@ class MemoListViewController: BaseViewController {
         let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         
         navigationController?.isToolbarHidden = false
-        navigationController?.toolbar.barTintColor = .black
-        navigationController?.toolbar.tintColor = .systemOrange
+        navigationController?.toolbar.barTintColor = Constants.BaseColor.background
+        navigationController?.toolbar.tintColor = Constants.BaseColor.point
 
         toolbarItems = [space, write]
     }
@@ -127,7 +127,7 @@ class MemoListViewController: BaseViewController {
     
     func changeFindColor(text: String) -> NSMutableAttributedString {
         let attributeString = NSMutableAttributedString(string: text)
-        attributeString.addAttribute(.foregroundColor, value: UIColor.orange, range: (text as NSString).range(of: "\(text)"))
+        attributeString.addAttribute(.foregroundColor, value: Constants.BaseColor.point, range: (text as NSString).range(of: "\(text)"))
         return attributeString
     }
     
@@ -172,7 +172,7 @@ extension MemoListViewController: UITableViewDataSource, UITableViewDelegate {
             
             let text = cell.titleLabel.text
             let attributeString = NSMutableAttributedString(string: text!)
-            attributeString.addAttribute(.foregroundColor, value: UIColor.orange, range: (text! as NSString).range(of: "\(searchText)"))
+            attributeString.addAttribute(.foregroundColor, value: Constants.BaseColor.point, range: (text! as NSString).range(of: "\(searchText)"))
             
             cell.titleLabel.attributedText = attributeString
             
@@ -235,7 +235,7 @@ extension MemoListViewController: UITableViewDataSource, UITableViewDelegate {
         let image = items[indexPath.row].pin == false ? "pin.fill" : "pin.slash.fill"
         
         pin.image = UIImage(systemName: image)
-        pin.backgroundColor = .systemOrange
+        pin.backgroundColor = Constants.BaseColor.point
         
         return UISwipeActionsConfiguration(actions: [pin])
     }

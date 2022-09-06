@@ -17,10 +17,10 @@ class WriteViewController: BaseViewController {
     
     var titleTextView: UITextView = {
         let view = UITextView()
-        view.backgroundColor = .black
+        view.backgroundColor = Constants.BaseColor.background
         view.text = "title"
         view.isEditable = true
-        view.textColor = .white
+        view.textColor = Constants.BaseColor.text
         view.font = .systemFont(ofSize: 24, weight: .bold)
         view.returnKeyType = .next
         view.isScrollEnabled = false
@@ -31,10 +31,10 @@ class WriteViewController: BaseViewController {
     
     var contentTextView: UITextView = {
         let view = UITextView()
-        view.backgroundColor = .black
+        view.backgroundColor = Constants.BaseColor.background
         view.text = "content"
         view.isEditable = true
-        view.textColor = .white
+        view.textColor = Constants.BaseColor.text
         view.font = .systemFont(ofSize: 14, weight: .medium)
         return view
     }()
@@ -42,7 +42,7 @@ class WriteViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 //        print(#function)
-        view.backgroundColor = .black
+        view.backgroundColor = Constants.BaseColor.background
         titleTextView.becomeFirstResponder()
         
         titleTextView.delegate = self
@@ -73,7 +73,7 @@ class WriteViewController: BaseViewController {
         let export = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .plain, target: self, action: #selector(exportButtonClicked))
         let done = UIBarButtonItem(title: "완료", style: .plain, target: self, action: #selector(doneButtonClicked))
         navigationItem.rightBarButtonItems = [done, export]
-        navigationController?.navigationBar.tintColor = .systemOrange
+        navigationController?.navigationBar.tintColor = Constants.BaseColor.point
     }
     
     override func setConstraints() {
