@@ -42,13 +42,11 @@ class WriteViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        print(#function)
         view.backgroundColor = Constants.BaseColor.background
         titleTextView.becomeFirstResponder()
         
         titleTextView.delegate = self
         contentTextView.delegate = self
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -78,7 +76,9 @@ class WriteViewController: BaseViewController {
     }
     
     override func setConstraints() {
+        
         let spacing = 20
+        
         titleTextView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
             make.leadingMargin.equalTo(view.safeAreaLayoutGuide).offset(spacing)
@@ -86,6 +86,7 @@ class WriteViewController: BaseViewController {
             make.bottomMargin.equalTo(contentTextView.snp.top).offset(-spacing)
             make.height.equalTo(45)
         }
+        
         contentTextView.snp.makeConstraints { make in
             make.leading.equalTo(titleTextView)
             make.topMargin.equalTo(titleTextView.snp.bottom).offset(spacing)
@@ -156,7 +157,6 @@ extension WriteViewController: UITextViewDelegate {
             })
             print("memo", memo.content!)
         }
-        
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
