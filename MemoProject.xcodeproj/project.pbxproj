@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		DE024EB728C5B29D00FE2F2A /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE024EB628C5B29D00FE2F2A /* Alert.swift */; };
+		DE5326C12903C0D100A6CFDB /* FolderListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5326C02903C0D100A6CFDB /* FolderListViewController.swift */; };
+		DE5326C32903C12900A6CFDB /* FolderMemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5326C22903C12900A6CFDB /* FolderMemoViewController.swift */; };
 		DE5DDCD528BF504B00F1DC87 /* Memo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5DDCD428BF504B00F1DC87 /* Memo.swift */; };
 		DE5DDCD728BF57A600F1DC87 /* BaseTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5DDCD628BF57A600F1DC87 /* BaseTableViewHeaderView.swift */; };
 		DE5DDCD928BF588800F1DC87 /* MemoListTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5DDCD828BF588800F1DC87 /* MemoListTableViewHeaderView.swift */; };
@@ -36,6 +38,8 @@
 
 /* Begin PBXFileReference section */
 		DE024EB628C5B29D00FE2F2A /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
+		DE5326C02903C0D100A6CFDB /* FolderListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderListViewController.swift; sourceTree = "<group>"; };
+		DE5326C22903C12900A6CFDB /* FolderMemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderMemoViewController.swift; sourceTree = "<group>"; };
 		DE5DDCD428BF504B00F1DC87 /* Memo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memo.swift; sourceTree = "<group>"; };
 		DE5DDCD628BF57A600F1DC87 /* BaseTableViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewHeaderView.swift; sourceTree = "<group>"; };
 		DE5DDCD828BF588800F1DC87 /* MemoListTableViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoListTableViewHeaderView.swift; sourceTree = "<group>"; };
@@ -75,6 +79,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DE5326BF2903C06300A6CFDB /* Folder */ = {
+			isa = PBXGroup;
+			children = (
+				DE5326C02903C0D100A6CFDB /* FolderListViewController.swift */,
+				DE5326C22903C12900A6CFDB /* FolderMemoViewController.swift */,
+			);
+			path = Folder;
+			sourceTree = "<group>";
+		};
 		DE5DDCD328BF502A00F1DC87 /* Model&Realm */ = {
 			isa = PBXGroup;
 			children = (
@@ -120,6 +133,7 @@
 		DEC8782728BF25EB00CCB5BD /* MemoProject */ = {
 			isa = PBXGroup;
 			children = (
+				DE5326BF2903C06300A6CFDB /* Folder */,
 				DEAC107E28C5D8FC002C18C3 /* FirstView */,
 				DE5DDCD328BF502A00F1DC87 /* Model&Realm */,
 				DEC8785128BF3AC900CCB5BD /* Framework */,
@@ -267,12 +281,14 @@
 				DEAC108028C5D90F002C18C3 /* FirstViewController.swift in Sources */,
 				DE5DDCDC28BF725900F1DC87 /* WriteViewController.swift in Sources */,
 				DE5DDCD528BF504B00F1DC87 /* Memo.swift in Sources */,
+				DE5326C32903C12900A6CFDB /* FolderMemoViewController.swift in Sources */,
 				DEC8782B28BF25EB00CCB5BD /* SceneDelegate.swift in Sources */,
 				DEA8DB2128C75F82007B103C /* Repository.swift in Sources */,
 				DEC8784628BF28C300CCB5BD /* BaseTableViewCell.swift in Sources */,
 				DEC8783F28BF270F00CCB5BD /* BaseView.swift in Sources */,
 				DE5DDCD728BF57A600F1DC87 /* BaseTableViewHeaderView.swift in Sources */,
 				DE5DDCD928BF588800F1DC87 /* MemoListTableViewHeaderView.swift in Sources */,
+				DE5326C12903C0D100A6CFDB /* FolderListViewController.swift in Sources */,
 				DEFFD08F28C090B10067B9CC /* RealmModel.swift in Sources */,
 				DE5DDCDE28BF78FC00F1DC87 /* ActivityViewController.swift in Sources */,
 				DEC8784428BF278600CCB5BD /* Color.swift in Sources */,
@@ -351,7 +367,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -405,7 +421,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -432,7 +448,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -463,7 +479,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

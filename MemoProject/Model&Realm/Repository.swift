@@ -18,6 +18,7 @@ class MemoRepository {
             try localRealm.write({
                 localRealm.add(memo)
                 print("realm success")
+                print("File:", localRealm.configuration.fileURL!)
             })
         } catch {
             print(error)

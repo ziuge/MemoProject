@@ -28,8 +28,13 @@ class UserMemo: Object {
 
 class Folder: Object {
     @Persisted var name: String
-    @Persisted var date: Date
+
     @Persisted var memos: List<UserMemo>
     
     @Persisted(primaryKey: true) var objectId: ObjectId
+    
+    convenience init(name: String) {
+        self.init()
+        self.name = name
+    }
 }
