@@ -7,7 +7,17 @@
 
 import UIKit
 
-struct MemoFolder {
+struct MemoFolder: Hashable {
+    static func == (lhs: MemoFolder, rhs: MemoFolder) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    
+    let id = UUID().uuidString
+    
     let name: String
     let memos: [Memo]
 }
@@ -16,35 +26,43 @@ struct MemoFolder {
 class FolderListViewController: UICollectionViewController {
     
     var list = [
-        MemoFolder(name: "hihi", memos: [Memo(title: "jjj", content: "jjj", date: Date(timeInterval: -86400, since: Date())), Memo(title: "kkk", content: "kkk", date: Date(timeInterval: -86444, since: Date()))]),
-        MemoFolder(name: "iii", memos: [])
+        MemoFolder(name: "hihi", memos: [
+            Memo(title: "jjj", content: "jjj", date: Date(timeInterval: -86400, since: Date())),
+            Memo(title: "kkk", content: "kkk", date: Date(timeInterval: -86444, since: Date())),
+            Memo(title: "lll", content: "lll", date: Date())
+        ]),
+        MemoFolder(name: "iii", memos: [
+            Memo(title: "today", content: "toda~~~~y", date: Date())
+        ])
     ]
     
     var cellRegistration: UICollectionView.CellRegistration<UICollectionViewListCell, MemoFolder>!
     
+    private var dataSource: UICollectionViewDiffableDataSource<Int, MemoFolder>!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .systemIndigo
-
         cellRegistration = UICollectionView.CellRegistration { cell, indexPath, itemIdentifier in
             
             var content = UIListContentConfiguration.valueCell()
             
             content.text = itemIdentifier.name
             content.textProperties.color = .red
+//            content.textProperties.alignment = .center
             
             content.secondaryText = "\(itemIdentifier.memos.count)개"
-//            content.prefersSideBySideTextAndSecondaryText = false
+            content.prefersSideBySideTextAndSecondaryText = false
+            content.textToSecondaryTextVerticalPadding = 20
             
             cell.contentConfiguration = content
             
             var backgroundConfig = UIBackgroundConfiguration.listPlainCell()
             
-            backgroundConfig.backgroundColor = .lightGray
+            backgroundConfig.backgroundColor = .white
             backgroundConfig.cornerRadius = 10
             backgroundConfig.strokeWidth = 1
-            backgroundConfig.strokeColor = .cyan
+            backgroundConfig.strokeColor = .black
             
             cell.backgroundConfiguration = backgroundConfig
         }
@@ -63,8 +81,12 @@ class FolderListViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        <#code#>
+        guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "FolderMemoViewController") else { return }
+        let code = FolderMemoViewController()
+        code.list = self.list[indexPath.item].memos
+
+        self.navigationController?.pushViewController(vc, animated: true)
+
     }
 
-    
 }
