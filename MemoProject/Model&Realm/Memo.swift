@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct Memo {
+struct Memo: Hashable {
+    let uuid = UUID()
     var title, content: String
     var date: Date
 }

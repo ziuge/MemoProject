@@ -36,6 +36,8 @@ class FolderListViewController: UICollectionViewController {
         ])
     ]
     
+    var viewModel = MemoViewModel()
+    
     var cellRegistration: UICollectionView.CellRegistration<UICollectionViewListCell, MemoFolder>!
     
     private var dataSource: UICollectionViewDiffableDataSource<Int, MemoFolder>!
@@ -43,7 +45,44 @@ class FolderListViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        cellRegistration = UICollectionView.CellRegistration { cell, indexPath, itemIdentifier in
+        configureHierarchy()
+        configureDataSource()
+        
+        viewModel.loadFolder(folder: list)
+        
+        viewModel.folderList.bind { folder in
+            var snapshot = NSDiffableDataSourceSnapshot<Int, MemoFolder>()
+            snapshot.appendSections([0])
+            snapshot.appendItems(self.list)
+            self.dataSource.apply(snapshot)
+        }
+        
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "FolderMemoViewController") else { return }
+        let code = FolderMemoViewController()
+        code.list = self.list[indexPath.item].memos
+
+        self.navigationController?.pushViewController(vc, animated: true)
+
+    }
+
+}
+
+extension FolderListViewController {
+    private func configureHierarchy() {
+        collectionView.collectionViewLayout = createLayout()
+    }
+    
+    private func createLayout() -> UICollectionViewLayout {
+        let config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+        let layout = UICollectionViewCompositionalLayout.list(using: config)
+        return layout
+    }
+    
+    private func configureDataSource() {
+        let cellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, MemoFolder> (handler: { cell, indexPath, itemIdentifier in
             
             var content = UIListContentConfiguration.valueCell()
             
@@ -52,7 +91,7 @@ class FolderListViewController: UICollectionViewController {
 //            content.textProperties.alignment = .center
             
             content.secondaryText = "\(itemIdentifier.memos.count)개"
-            content.prefersSideBySideTextAndSecondaryText = false
+            content.prefersSideBySideTextAndSecondaryText = true
             content.textToSecondaryTextVerticalPadding = 20
             
             cell.contentConfiguration = content
@@ -65,28 +104,11 @@ class FolderListViewController: UICollectionViewController {
             backgroundConfig.strokeColor = .black
             
             cell.backgroundConfiguration = backgroundConfig
-        }
+        })
         
+        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
+            let cell = collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: itemIdentifier)
+            return cell
+        })
     }
-    
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let item = list[indexPath.item]
-        let cell = collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: item)
-        
-        return cell
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return list.count
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "FolderMemoViewController") else { return }
-        let code = FolderMemoViewController()
-        code.list = self.list[indexPath.item].memos
-
-        self.navigationController?.pushViewController(vc, animated: true)
-
-    }
-
 }

@@ -15,6 +15,8 @@
 		DE5DDCD928BF588800F1DC87 /* MemoListTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5DDCD828BF588800F1DC87 /* MemoListTableViewHeaderView.swift */; };
 		DE5DDCDC28BF725900F1DC87 /* WriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5DDCDB28BF725900F1DC87 /* WriteViewController.swift */; };
 		DE5DDCDE28BF78FC00F1DC87 /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5DDCDD28BF78FC00F1DC87 /* ActivityViewController.swift */; };
+		DE8267B7290AA99A00E53F72 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE8267B6290AA99A00E53F72 /* ViewModel.swift */; };
+		DE8267B9290AAA4E00E53F72 /* CObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE8267B8290AAA4E00E53F72 /* CObservable.swift */; };
 		DE9178BA29027D49006CC5AE /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = DE9178B929027D49006CC5AE /* Realm */; };
 		DE9178BC29027D49006CC5AE /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DE9178BB29027D49006CC5AE /* RealmSwift */; };
 		DEA8DB2128C75F82007B103C /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEA8DB2028C75F82007B103C /* Repository.swift */; };
@@ -45,6 +47,8 @@
 		DE5DDCD828BF588800F1DC87 /* MemoListTableViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoListTableViewHeaderView.swift; sourceTree = "<group>"; };
 		DE5DDCDB28BF725900F1DC87 /* WriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteViewController.swift; sourceTree = "<group>"; };
 		DE5DDCDD28BF78FC00F1DC87 /* ActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityViewController.swift; sourceTree = "<group>"; };
+		DE8267B6290AA99A00E53F72 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		DE8267B8290AAA4E00E53F72 /* CObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CObservable.swift; sourceTree = "<group>"; };
 		DEA8DB2028C75F82007B103C /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
 		DEAC107F28C5D90F002C18C3 /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
 		DEC8782528BF25EB00CCB5BD /* MemoProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MemoProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -106,6 +110,15 @@
 			path = Write;
 			sourceTree = "<group>";
 		};
+		DE8267B5290AA98B00E53F72 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				DE8267B6290AA99A00E53F72 /* ViewModel.swift */,
+				DE8267B8290AAA4E00E53F72 /* CObservable.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		DEAC107E28C5D8FC002C18C3 /* FirstView */ = {
 			isa = PBXGroup;
 			children = (
@@ -133,6 +146,7 @@
 		DEC8782728BF25EB00CCB5BD /* MemoProject */ = {
 			isa = PBXGroup;
 			children = (
+				DE8267B5290AA98B00E53F72 /* ViewModel */,
 				DE5326BF2903C06300A6CFDB /* Folder */,
 				DEAC107E28C5D8FC002C18C3 /* FirstView */,
 				DE5DDCD328BF502A00F1DC87 /* Model&Realm */,
@@ -285,6 +299,8 @@
 				DEC8782B28BF25EB00CCB5BD /* SceneDelegate.swift in Sources */,
 				DEA8DB2128C75F82007B103C /* Repository.swift in Sources */,
 				DEC8784628BF28C300CCB5BD /* BaseTableViewCell.swift in Sources */,
+				DE8267B9290AAA4E00E53F72 /* CObservable.swift in Sources */,
+				DE8267B7290AA99A00E53F72 /* ViewModel.swift in Sources */,
 				DEC8783F28BF270F00CCB5BD /* BaseView.swift in Sources */,
 				DE5DDCD728BF57A600F1DC87 /* BaseTableViewHeaderView.swift in Sources */,
 				DE5DDCD928BF588800F1DC87 /* MemoListTableViewHeaderView.swift in Sources */,
