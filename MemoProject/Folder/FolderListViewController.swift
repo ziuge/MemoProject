@@ -62,9 +62,12 @@ class FolderListViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "FolderMemoViewController") else { return }
         let code = FolderMemoViewController()
-        code.list = self.list[indexPath.item].memos
-
-        self.navigationController?.pushViewController(vc, animated: true)
+//        code.list = self.list[indexPath.item].memos
+        print("=====", self.list[indexPath.item].memos)
+        
+        code.viewModel.reloadMemo(memo: self.list[indexPath.item].memos)
+        
+        present(vc, animated: true)
 
     }
 

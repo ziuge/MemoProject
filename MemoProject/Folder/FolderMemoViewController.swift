@@ -22,16 +22,23 @@ class FolderMemoViewController: UICollectionViewController {
         
         configureHierarchy()
         configureDataSource()
+        
+//        viewModel.reloadMemo(memo: list)
+        print(viewModel.memoList.value)
+        
         bindData()
     }
     
     func bindData() {
-        viewModel.memoList.bind { title in
-            self.list.append(Memo(title: title, content: "", date: Date()))
+        viewModel.memoList.bind { memos in
+            var snapshot = NSDiffableDataSourceSnapshot<Int, Memo>()
+            snapshot.appendSections([0])
+            snapshot.appendItems(memos)
+            self.dataSource.apply(snapshot)
         }
     }
     
-//
+
 //    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 //        let item = list[indexPath.item]
 //        let cell = collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: item)
@@ -64,9 +71,9 @@ extension FolderMemoViewController {
             content.text = itemIdentifier.title
             content.textProperties.color = .blue
             
-            content.secondaryText = "\(itemIdentifier.content)"
-            content.prefersSideBySideTextAndSecondaryText = true
-            content.textToSecondaryTextHorizontalPadding = 20
+            content.secondaryText = "\(itemIdentifier.date)"
+            content.prefersSideBySideTextAndSecondaryText = false
+//            content.textToSecondaryTextHorizontalPadding = 20
             
             cell.contentConfiguration = content
         }

@@ -8,11 +8,11 @@
 import Foundation
 
 class MemoViewModel {
-    var memoList: CObservable<String> = CObservable("100")
+    var memoList: CObservable<[Memo]> = CObservable([Memo(title: "", content: "", date: Date())])
     var folderList: CObservable<[MemoFolder]> = CObservable([MemoFolder(name: "", memos: [Memo(title: "", content: "", date: Date())])])
     
-    func reloadMemo(title: String) {
-        memoList.value = title
+    func reloadMemo(memo: [Memo]) {
+        memoList.value = memo
     }
     
     func loadFolder(folder: [MemoFolder]) {
